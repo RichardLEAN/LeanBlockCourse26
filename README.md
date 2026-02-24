@@ -11,11 +11,22 @@
 ## General notes
 
 * This is the second time this course is being held. The structure will largely follow last year's with some additions and modifications, but is nevertheless subject to (spontaneous) change. Constructive feedback is welcomed throughout the course and afterwards.
-* The course is split into two sessions (9:30 to 12:30 and 14:00 to 17:00) each day and takes place from **Monday the 2nd of March** to **Friday the 13th of March 2026**. The venue has not yet been settled, but the course will be helf on the Dahlem Campus, either at FUB or ZIB.
+* The course is split into two sessions (9:30 to 12:30 and 14:00 to 17:00) each day and takes place from **Monday the 2nd of March** to **Friday the 13th of March 2026**. The course will be held in **Seminarraum 119 (A3/SR 119) at Arnimallee 3** on the FUB Dahlem Campus.
 * The course is open to everyone, including guest auditors (Gasthörer), not just those who need it for their degree. However, priority will be given to FU students who need the course as part of their ABV degree program. The course will also be offered for **Master students at the FUB** as well as as a **BMS Advanced Course** for the first time this year! For the `aktive Teilnahme', Master-level participants will be required to solve additional and more advanced problems in the exercise sessions compared to Bachelor-level students. Both Bachelor and Master-level students will be given the same **final exam on the second Friday at the end of the course**. There will be an **additional final project task for the Master-level students** that the students will be given one or two weeks time after the end of the block course to solve. The exact scope of that additional project and the format of the evaluation of it has not yet been determined but may include an in-person presentation.
 * Participants **need to bring a laptop** to do the exercises and follow along during the course and work on exercises and project work.
-* Completion of Analysis I and Linear Algebra I should provide a sufficient mathematical background, but participants should have a strong understanding of these subjects, as formal proof verification is very "unforgiving". No prior programming experience is required, but a certain "technical affinity and interest" is needed. Besides formal proof verification, you will be in contact with many other tools such as `git` and `github`, [Patrick Massot's](https://www.imo.universite-paris-saclay.fr/~patrick.massot/en/) `leanblueprint`, containerization through `docker`, CI/CD in the form of `github Actions`, as well as various ML tools.
+* Completion of Analysis I and Linear Algebra I should provide a sufficient mathematical background, but participants should have a strong understanding of these subjects, as formal proof verification is very "unforgiving". No prior programming experience is required, but a certain "technical affinity and interest" is needed. Besides formal proof verification, you will be in contact with many other tools such as `git` and `github`, [Patrick Massot's](https://www.imo.universite-paris-saclay.fr/~patrick.massot/en/) `leanblueprint`, CI/CD in the form of `github Actions`, as well as various ML tools.
 * The course will be **conducted in English**, but Bachelor students taking the course as part of their ABV requirements may express themselves in German if they prefer.
+
+## Setup
+
+We will walk through the full setup together on the first day. We will cover the following:
+
+* Setting up [Visual Studio Code](https://code.visualstudio.com).
+* Creating a **[GitHub account](https://github.com/signup)**.
+* Setting up **git**. The process varies by platform:
+  * **macOS** — `xcode-select --install` installs Apple's developer tools, which include git. [Homebrew](https://brew.sh) is not required but recommended as a general package manager.
+  * **Linux** — Install git via your package manager, e.g. `sudo apt install git` on Debian/Ubuntu or `sudo pacman -S git` on Arch.
+  * **Windows** — We recommend installing [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) (Windows Subsystem for Linux) with Ubuntu, which is the officially recommended environment for Lean on Windows. Git is then installed within WSL (`sudo apt install git`). Keep your course files inside the WSL filesystem (e.g. `~/projects/`) rather than your Windows Documents folder, and open VS Code from within WSL using `code .`.
 
 ## Course Outline
 
@@ -23,10 +34,10 @@ The course outline is still subject to change, but will roughly be as follows:
 
 1) General introduction, or: why formalize maths?
 1) The tech stack, or: how to properly organize a formalization project?
-1) Foundations of Logic in LEAN, or: what is a type and what does being constructive vs. intuitionistic mean?
+1) Foundations of Logic in LEAN, or: what is a type and what does being classical vs. intuitionistic mean?
 1) Set theory in LEAN, or: why you should rarely do set theory in LEAN
 1) Natural numbers in LEAN, or: why inductive types are so powerful.
-1) **Formalization Example** The infinitude primes, or: your first real proof in LEAN.
+1) **Formalization Example** The infinitude of primes, or: your first real proof in LEAN.
 1) **Formalization Example** The handshaking lemma, or: graph theory and combinatorics in LEAN.
 1) **Examination** Final exam and distribution of small formalization projects for Master-level students.
 1) **Optional** An example on how to contribute to mathlib.
@@ -41,7 +52,7 @@ The course outline is still subject to change, but will roughly be as follows:
 
 * `lake init ProjectName math` sets up a project with mathlib as a dependency in the current folder.
 * `lake build` builds the project.
-* If your info view shows that it is compiling a lot of files from mathlib, then (1) run `pkill -f lean` (MacOS / Linux) or `Stop-Process -Name *lean* -Force` (Windows) to kill the running Lean processes, (2) remove the `.lake` folder, e.g., by running `rm -rf .lake` in a POSIX complaint OS, and run `lake clean`, (3) run `lake exe cache get` to download the mathlib binaries again, and finally (4) restart the Lean server by clicking on the `∀` button in VS Code and choosing `Server: Restart Server`.
+* If your info view shows that it is compiling a lot of files from mathlib, then (1) run `pkill -f lean` (MacOS / Linux) or `Stop-Process -Name *lean* -Force` (Windows) to kill the running Lean processes, (2) remove the `.lake` folder, e.g., by running `rm -rf .lake` in a POSIX compliant OS, and run `lake clean`, (3) run `lake exe cache get` to download the mathlib binaries again, and finally (4) restart the Lean server by clicking on the `∀` button in VS Code and choosing `Server: Restart Server`.
 
 ### `leanblueprint`
 
