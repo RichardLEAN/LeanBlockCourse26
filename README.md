@@ -14,5 +14,5 @@ Taught by [Christoph Spiegel](https://christophspiegel.berlin) (ZIB) with [Silas
 
 ## Announcements
 
-- **2026-03-03:** Tomorrow (Tuesday) we meet at **9:40** instead of 9:30.
+- **2026-03-03:** On Tuesday (March 4) we meet at **9:40** instead of 9:30.
 - **2026-03-02:** Uploaded slides for `P01_Introduction`.
