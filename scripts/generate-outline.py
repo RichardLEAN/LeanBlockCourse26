@@ -322,11 +322,17 @@ def inline_md_to_html(text: str) -> str:
 
 
 def format_label(ann: Announcement) -> str:
-    """Format announcement as a date+time label pill."""
-    if ann.timestamp:
-        text = ann.timestamp.strftime("%a, %b %-d · %-H:%M")
+    """Format announcement as a date+time label pill.
+
+    The date always comes from the explicit **YYYY-MM-DD:** prefix in the
+    markdown.  Only the time-of-day is taken from git blame (if available
+    and the blame date matches the announced date).
+    """
+    day = ann.d.strftime("%a, %b %-d")
+    if ann.timestamp and ann.timestamp.date() == ann.d:
+        text = f"{day} · {ann.timestamp.strftime('%-H:%M')}"
     else:
-        text = ann.d.strftime("%a, %b %-d")
+        text = day
     return f'<span class="label label-yellow">{text}</span>'
 
 
