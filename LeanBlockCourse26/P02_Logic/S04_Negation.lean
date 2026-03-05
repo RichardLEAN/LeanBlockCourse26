@@ -396,19 +396,82 @@ theorem exercise_2_2_not_quite_classical (P Q : Prop) : (P → Q) → (¬Q → �
 
 -- Exercise 3.1
 example (P Q : Prop) : (P → Q) ↔ (¬Q → ¬P) := by
-  sorry
+  constructor
+  · exact exercise_2_1_constructive P Q
+  · intro h p
+    by_contra nq
+    exact (h nq) p
+
+example (P Q : Prop) : (P → Q) ↔ (¬Q → ¬P) := by
+  constructor
+  · exact exercise_2_1_constructive P Q
+  · have h:= exercise_2_1_constructive (¬Q) (¬P)
+    push_neg at h
+    exact h
 
 -- Exercise 3.2
 -- Prove this using a case distinction on `P`
 example (P Q : Prop) : (P → Q) → (¬P → Q) → Q := by
-  sorry
+  intro pq npq
+  by_cases h: P
+  · by_cases g : Q
+    · exact g
+    · exact pq h
+  · by_cases g : Q
+    · exact g
+    · exact npq h
 
+example (P Q : Prop) : (P → Q) → (¬P → Q) → Q := by
+  intro pq npq
+  by_cases h: P
+  all_goals
+  try assumption
+  try exact pq h
+  try exact npq h
+
+example (P Q : Prop) : (P → Q) → (¬P → Q) → Q := by
+  intro pq npq
+  by_cases h: P
+  · exact pq h
+  · exact npq h
+  
 -- Exercise 3.3 (Master)
 -- Prove this by combining `by_cases` with `push_neg`
 example (P : Prop) : ¬(P ↔ ¬P) := by
-  sorry
+  intro h₁
+  by_cases h : P
+  · let np := h₁.mp h
+    exact np h
+  · let np := h₁.mpr h
+    exact h np
+
+example (P : Prop) : ¬(P ↔ ¬P) := by
+  intro h₁
+  by_cases h : P
+  · exact (h₁.mp h) h
+  · exact h (h₁.mpr h)
+
+example (P : Prop) : ¬(P ↔ ¬P) := by
+  push_neg
+  by_cases p : P
+  · left; exact ⟨p, p⟩
+  · right; exact ⟨p, p⟩
+
+example (P : Prop) : ¬(P ↔ ¬P) := by
+  push_neg
+  by_cases p : P
+  · left; exact ⟨p, p⟩
+  · right; exact ⟨p, p⟩
 
 -- Exercise 3.4 (Master)
 -- Prove this using as few characters as possible
 example (A B C : Prop) : (A ∧ (¬¬C)) ∨ (¬¬B) ∧ C ↔ (A ∧ C) ∨ B ∧ (¬¬C) := by
-  sorry
+  push_neg
+  rfl
+
+example (A B C : Prop) : (A ∧ (¬¬C)) ∨ (¬¬B) ∧ C ↔ (A ∧ C) ∨ B ∧ (¬¬C) := by
+  have (D : Prop) :  ¬¬D ↔ D := by -- this is just `not_not` in lean
+    constructor
+    · exact push_neg_example D -- this was the classical part
+    · exact fun d nd => nd d   -- this is actually constructive
+  rw [this, this]
