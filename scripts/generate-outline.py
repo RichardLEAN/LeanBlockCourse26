@@ -12,10 +12,11 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parent.parent
+DOCS = ROOT / "docs"
 CODE_DIR = ROOT / "LeanBlockCourse26"
-SLIDES_DIR = ROOT / "lecture-slides"
-OUT = ROOT / "OUTLINE.md"
-HOME = ROOT / "HOME.md"
+SLIDES_DIR = DOCS / "lecture-slides"
+OUT = DOCS / "OUTLINE.md"
+HOME = DOCS / "HOME.md"
 README = ROOT / "README.md"
 
 GITHUB_BLOB = "https://github.com/FordUniver/LeanBlockCourse26/blob/main"
@@ -150,7 +151,7 @@ def generate() -> str:
     slide_rows = []
     for part, _ in PARTS:
         if pdf := find_slides(part):
-            rel = pdf.relative_to(ROOT)
+            rel = pdf.relative_to(DOCS)
             slide_rows.append(f"| `{part}` | [{pdf.name}]({rel}) |")
     if slide_rows:
         lines.append("")

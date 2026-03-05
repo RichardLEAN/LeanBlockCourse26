@@ -11,5 +11,5 @@ core
 *.out
 *.snm
 *.toc
-OUTLINE.md
-TACTICS.md
+docs/OUTLINE.md
+docs/TACTICS.md

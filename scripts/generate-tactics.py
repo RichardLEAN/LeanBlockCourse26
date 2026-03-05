@@ -273,7 +273,7 @@ def main() -> None:
                         help="Print to stdout instead of writing")
     args = parser.parse_args()
 
-    output = args.output or ROOT / "TACTICS.md"
+    output = args.output or ROOT / "docs" / "TACTICS.md"
     data_file = args.data or DATA_FILE
 
     # Load tactic data

@@ -9,13 +9,3 @@ aux_links:
   GitHub: https://github.com/FordUniver/LeanBlockCourse26
 
 nav_enabled: true
-
-exclude:
-  - .lake/
-  - lakefile.toml
-  - lean-toolchain
-  - LeanBlockCourse26.lean
-  - LeanBlockCourse26/
-  - BlockCourse/
-  - README.md
-  - scripts/
