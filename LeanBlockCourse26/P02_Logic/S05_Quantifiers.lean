@@ -185,14 +185,14 @@ example : (∀ x : α, p x ∧ q x) ↔ ((∀ x : α, p x) ∧ (∀ x : α, q x)
   ⟨fun h => ⟨fun x => (h x).1, fun x => (h x).2⟩, fun ⟨h₁, h₂⟩ x => ⟨h₁ x, h₂ x⟩⟩
 
 -- Exercise 1.2
-example : ((∀ x : α, p x) ∨ (∀ x : α, q x)) → (∀ x : α, p x ∨ q x) :=
+example : ((∀ x : α, p x) ∨ (∀ x : α, q x)) → (∀ x : α, p x ∨ q x) := by
   intro h x
-  obtain (px | qx) := h
+  obtain px | qx := h
   · left; exact px x
   · right; exact qx x
 
 -- Exercise 1.3
-example : (∃ x, p x ∧ q x) → (∃ x, p x) ∧ (∃ x, q x) :=
+example : (∃ x, p x ∧ q x) → (∃ x, p x) ∧ (∃ x, q x) := by
   intro ⟨x, px, qx⟩
   constructor
   all_goals use x
@@ -200,7 +200,6 @@ example : (∃ x, p x ∧ q x) → (∃ x, p x) ∧ (∃ x, q x) :=
 -- Exercise 1.4
 -- Hint: use the `choose` tactic
 example (R : α → α → Prop) (h : ∀ x, ∃ y, R x y) : ∃ f : α → α, ∀ x, R x (f x) := by
-    ∃ f : X → X, ∀ x, R x (f x) := by
   choose f hf using h
   use f
 
@@ -213,13 +212,13 @@ example {β} (Y : Type) (r : β → Prop)
   use ⟨x, y⟩
 
 -- Exercise 1.6 (Master)
-example (α : Type) (p q : α → Prop) : (∃ x : α, p x ∨ q x) ↔ ((∃ x : α, p x) ∨ (∃ x : α, q x)) := b
+example (α : Type) (p q : α → Prop) : (∃ x : α, p x ∨ q x) ↔ ((∃ x : α, p x) ∨ (∃ x : α, q x)) := by
   constructor
   · intro h
-    obtain ⟨x, (px | qx)⟩ := h
+    obtain ⟨x, px | qx⟩ := h
     · left; use x
     · right; use x
   · intro h
-    obtain (⟨x, px⟩ | ⟨x, qx⟩) := h
+    obtain ⟨x, px⟩ | ⟨x, qx⟩ := h
     · use x; left; exact px
-    · use x; right; exact qxy
+    · use x; right; exact qx
