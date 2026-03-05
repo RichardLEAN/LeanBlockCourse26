@@ -205,14 +205,14 @@ example (P Q : Prop) : (P ∧ Q) → P := by
   obtain ⟨p, _⟩ := h
   exact p
 
-theorem and_intro (P Q : Prop) : (P ∧ Q) → P := by
+theorem and_left (P Q : Prop) : (P ∧ Q) → P := by
   intro ⟨p, _⟩
   exact p
 
 -- This also works nicely in term mode ...
 example (P Q : Prop) : (P ∧ Q) → P := fun ⟨p, _⟩ => p
 
--- ... which is just nicer notation for the term given by `#print and_intro`
+-- ... which is just nicer notation for the term given by `#print and_left`
 example (P Q : Prop) : (P ∧ Q) → P := 
   fun h => match h with
     | ⟨p, _⟩ => p
@@ -661,7 +661,9 @@ parses as `(P ∧ R) ∨ ((P ∧ S) ∨ ((Q ∧ R) ∨ (Q ∧ S)))`. This means
         exact r
       · exact s
 
--- 122 chars — if you accept the broken linter you can skip some `·` focusing
+-- 122 chars — the `multiGoal` linter allows skipping some `·` focusing here,
+-- because after the first `·` branch closes only one goal remains, so the next
+-- `constructor` runs in a single-goal context. See the addendum on the homepage.
 #golf example (P Q R S : Prop) : ((P ∧ Q) ∨ R) ∧ S → (P ∨ R) ∧ (Q ∨ R) ∧ S := by
   rintro ⟨h | r, s⟩
   constructor
