@@ -35,7 +35,7 @@ embraces calling everything a `theorem`.
 A *Fact* is (usually) a cleanly separate sub-statement in the
 proof of a bigger *Theorem* that is not worth abstracting into
 its own *Lemma* since there is no expectation it will be used
-in any other proofs besides this one specific one.
+in any other proofs besides this particular one.
 
 This is remarkably similar to the `DRY` (Do Not Repeat Yourself)
 principle in coding: if a block of code is only used in this one
