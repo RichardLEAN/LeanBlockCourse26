@@ -875,8 +875,57 @@ OR  – use `( )` with `|`
 
 -- Prove the associativity of disjunction: `(P ∨ Q) ∨ R ↔ P ∨ (Q ∨ R)`.
 example (P Q R : Prop) : (P ∨ Q) ∨ R ↔ P ∨ (Q ∨ R) := by
-  sorry
+  constructor
+
+  -- The modus ponens `.mp`
+  · rintro ((p | q) | r)
+    · left; exact p
+    · right; left; exact q
+    · right; right; exact r
+
+  -- The modus tolens `.mpr`
+  · rintro (p | q | r)  -- no second pair of brackets needed here because `|` right  associates
+    · left; left; exact p
+    · left; right; exact q
+    · right; exact r
 
 -- Prove that `OR` distributes over `AND` in both directions.
 example (P Q R : Prop) : (P ∧ Q) ∨ R ↔ (P ∨ R) ∧ (Q ∨ R) := by
-  sorry
+  constructor
+
+  -- The modus ponens `.mp`
+  · rintro (⟨p, q⟩ | r)
+    · constructor
+      · left; exact p
+      · left; exact q
+    · constructor
+      · right; exact r
+      · right; exact r
+
+  -- The modus tolens `.mpr`
+  · rintro ⟨ (p | r), (q | r)⟩
+    · left; exact ⟨p, q⟩
+    · right; exact r
+    · right; exact r
+    · right; exact r
+
+-- We can be slightly more clever in the `.mp` case with `all_goals`;
+-- `rintro _ | _` creates two sub-goals, each of which has two sub-goals
+-- of its own through constructor, giving a total of four sub-goals
+example (P Q R : Prop) : (P ∧ Q) ∨ R ↔ (P ∨ R) ∧ (Q ∨ R) := by
+  constructor
+
+  -- The modus ponens `.mp`
+  · rintro (⟨p, q⟩ | r)
+    all_goals constructor
+    · left; exact p
+    · left; exact q
+    · right; exact r
+    · right; exact r
+
+  -- The modus tolens `.mpr`
+  · rintro ⟨ (p | r), (q | r)⟩
+    · left; exact ⟨p, q⟩
+    · right; exact r
+    · right; exact r
+    · right; exact r
