@@ -142,8 +142,11 @@ lemma mem_pair (t x y : α) : t ∈ ({x, y} : Set α) ↔ t = x ∨ t = y := by 
 (again essentially) defined as `S ⊆ T ∧ ¬T ⊆ S`.
 -/
 
--- This is `Set.subset_def` in mathlib
+-- This is `Set.subset_def` in mathlib ...
 lemma subset_def {S T : Set α} : (S ⊆ T) = ∀ x ∈ S, x ∈ T := rfl
+
+-- ... but `∀ x ∈ S` makes `x : α` and `x ∈ S` explicit, which we could avoid throgh
+lemma subset_def_impl {S T : Set α} : (S ⊆ T) = ({x : α} → x ∈ S → x ∈ T) := rfl
 
 -- This is `Set.ssubset_def` in mathlib
 lemma ssubset_def {S T : Set α} : (S ⊂ T) = (S ⊆ T ∧ ¬T ⊆ S) := rfl
@@ -221,26 +224,78 @@ variable {S T : Set α}
 
 -- Exercise 1.1
 example {x : α} (h₁ : S ⊆ T) (h₂ : x ∈ S) : x ∈ T := by
-  sorry
+  rw [subset_def] at h₁
+  exact h₁ x h₂
+
+example {x : α} (h₁ : S ⊆ T) (h₂ : x ∈ S) : x ∈ T := by
+  rw [subset_def_impl] at h₁
+  exact h₁ h₂
+  
+example {x : α} (h₁ : S ⊆ T) (h₂ : x ∈ S) : x ∈ T := by
+  exact h₁ h₂
+
+example {x : α} (h₁ : S ⊆ T) (h₂ : x ∈ S) : x ∈ T := h₁ h₂
 
 -- Exercise 1.2
+example {x : α} (R : Set α) (h₁ : S ⊆ T) (h₂ : T ⊆ R) (h₃ : x ∈ S) : x ∈ R := by
+  rw [subset_def] at *
+  have xt : x ∈ T := h₁ x h₃
+  have xr : x ∈ R := h₂ x xt
+  exact xr
+
+example {x : α} (R : Set α) (h₁ : S ⊆ T) (h₂ : T ⊆ R) (h₃ : x ∈ S) : x ∈ R := 
+  h₂ <| h₁ h₃
+
+example {x : α} (R : Set α) (h₁ : S ⊆ T) (h₂ : T ⊆ R) (h₃ : x ∈ S) : x ∈ R := by
+  have h₄ : S ⊆ R := Subset.trans h₁ h₂
+  rw [subset_def] at h₄
+  exact h₄ x h₃
+
 example {x : α} (R : Set α) (h₁ : S ⊆ T) (h₂ : T ⊆ R) (h₃ : x ∈ S) : x ∈ R :=
- sorry
+  (Subset.trans h₁ h₂) h₃
 
 -- Exercise 1.3
 example {x : α} {R : Set α} (h₁ : S ⊆ T) (h₂ : x ∈ T → x ∈ R) : x ∈ S → x ∈ R := by
-  sorry
+  intro xs
+  exact h₂ (h₁ xs)
+
+example {x : α} {R : Set α} (h₁ : S ⊆ T) (h₂ : x ∈ T → x ∈ R) : x ∈ S → x ∈ R :=
+  fun xs => h₂ (h₁ xs)
 
 -- Exercise 1.4
+-- Note that `x ∉ T` is just notation for `¬(x ∈ T)` and hence  `(x ∈ T) → False`
 example (h : S ⊆ T) {x : α} (hx : x ∉ T) : x ∉ S := by
-  sorry
+  intro xs
+  exact hx (h xs)
+
+example (S T : Set α) (h : S ⊆ T) (x : α) (hx : x ∉ T) : x ∉ S :=
+  fun xs => hx (h xs)
 
 -- Exercise 1.5 (Master)
 example {R : Set α} (h₁ : S ⊂ T) (h₂ : T ⊆ R) : S ⊂ R := by
-  sorry
+  constructor
+  · intro a as
+    exact h₂ (h₁.left as)
+  · intro r
+    obtain c := h₁.2
+    exact c (Subset.trans h₂ r)
+
+example {R : Set α} (h₁ : S ⊂ T) (h₂ : T ⊆ R) : S ⊂ R :=
+  ⟨fun _ xs => h₂ (h₁.left xs), fun rs => h₁.right (Subset.trans h₂ rs)⟩ 
 
 -- Exercise 1.6 (Master)
-example : ∃ U, U ⊆ S := by
-  sorry
+
+-- The empty set is the subset of any set `S` ...
+example : ∃ T, T ⊆ S := by
+  use ∅
+  exact empty_subset S
+
+example : ∃ T, T ⊆ S := ⟨∅, empty_subset S⟩
+
+-- ... as is the set `S` itself
+example : ∃ T, T ⊆ S := by
+  use S
+
+example : ∃ T, T ⊆ S := ⟨S, by rfl⟩
 
 end P03S01B01
