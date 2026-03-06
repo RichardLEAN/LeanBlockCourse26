@@ -431,3 +431,7 @@ example (h : S ⊆ T) {x : α} (hx : x ∈ Tᶜ) : x ∈ Sᶜ := by
 -- Exercise 2.9 (Master)
 example {R : Set α} (h₁ : R ⊆ S) (h₂ : S ⊆ T) : Tᶜ ⊆ Rᶜ := by
   sorry
+
+-- Exercise 2.10
+example (x : α) (S : Set α) : x ∈ Sᶜ ↔ (x ∈ S → False) := by 
+  sorry
