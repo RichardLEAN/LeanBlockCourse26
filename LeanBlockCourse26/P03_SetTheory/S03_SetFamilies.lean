@@ -4,6 +4,7 @@ https://github.com/leanprover-community/lean4game
 -/
 
 import Mathlib.Data.Set.Basic
+import Mathlib.Data.Set.Lattice
 import Mathlib.Order.SetNotation
 import Mathlib.Tactic.Cases
 import LeanBlockCourse26.P03_SetTheory.S02_IntersectionsUnions

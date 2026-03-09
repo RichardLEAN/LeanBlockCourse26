@@ -8,15 +8,11 @@ The payoff: verified computation with Subtype, axiom tracing with
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Nat.Prime.Basic
 import Mathlib.Tactic.Cases
-import Mathlib.Algebra.BigOperators.Fin
-import Mathlib.Data.Nat.Prime.Basic
 
-open BigOperators Bool Nat
-
-
+open Nat
 
 /-!
-## (Inductive) type classes and their instances
+## Type classes and instances
 
 ### Inhabited
 -/
@@ -26,13 +22,7 @@ open BigOperators Bool Nat
 
 #eval @Inhabited.default Nat _
 
-
--- This works and shows `0`because `Nat` is shown to be an instance of type class `Inhabited` ...
-#eval @Inhabited.default Nat _
-
--- ... by providing its zero constructor as thge default element
-instance : Inhabited Nat where
-  default := Nat.zero
+-- `Inhabited α` lives in `Type`: we can compute with the default element.
 
 /-!
 ### Nonempty
@@ -40,18 +30,16 @@ instance : Inhabited Nat where
 
 #check Nonempty
 
--- This works ...
 #check Nonempty.intro Nat
 
--- ... but `eval` complains about `proofs are not computationally relevant` ...
+-- `Nonempty α` lives in `Prop`, so we cannot evaluate it for runtime data.
 -- #eval Nonempty.intro Nat
-#check Nonempty.intro Nat
 
--- A `Prop` is nonempty if it has a term `p` ...
+-- A proposition is nonempty if we already have a term `p : P`.
 variable (P : Prop) (p : P)
-instance : Nonempty P := Nonempty.intro p
+example : Nonempty P := Nonempty.intro p
 
--- ... but `eval` again does not work because `Prop` is stateless
+-- Still not evaluatable: `Prop` carries no runtime data.
 -- #eval Nonempty.intro Nat
 #check Nonempty.intro P
 
@@ -64,10 +52,10 @@ instance : Nonempty P := Nonempty.intro p
 
 #check @instDecidableAnd
 
-def p_nat_even := (fun n : Nat => n  % 2 = 0) 
+def p_nat_even := (fun n : Nat => n % 2 = 0)
 
 noncomputable instance pNatEvenDecidableClassical : DecidablePred p_nat_even :=
-    Classical.decPred p_nat_even
+  Classical.decPred p_nat_even
 
 
 -- instance pNatEvenDecidableConstructive : DecidablePred p_nat_even :=
@@ -91,19 +79,19 @@ variable {α : Type}
 -- Step 1: algorithm. `[DecidablePred p]` lets `if` branch on a Prop.
 
 /-
-`List` is defined inductively on lean with constructors for an empty
-list (`nil`) and an dependent constructor `cons` that appends and element
+`List` is defined inductively in Lean with constructors for an empty
+list (`nil`) and a constructor `cons` that prepends an element
 `(head : α)` to a given existing list `(tail : List α)`.
 
 inductive List (α : Type u) where
   | nil : List α 
   | cons (head : α) (tail : List α) : List α
 
-We can use `[...]` notation with `[] = List.nil`
+Bracket notation uses `[] = List.nil`.
 -/
 
 def propFilter (p : α → Prop) [DecidablePred p] : List α → List α
-  | [] => [] 
+  | [] => []
   | head :: tail =>
       let filtered_tail := propFilter p tail
       if (p head) then
@@ -111,15 +99,13 @@ def propFilter (p : α → Prop) [DecidablePred p] : List α → List α
       else
         filtered_tail
 
--- We can actually evaluate this computationally ...
-#eval propFilter (fun n : Nat => n  % 2 = 0)  [1, 2, 3, 4, 5, 6]
+-- This evaluates computationally.
+#eval propFilter (fun n : Nat => n % 2 = 0) [1, 2, 3, 4, 5, 6]
 
 
--- ... but only if we know `DecidablePred` holds and is computable
+-- This fails when the decision procedure is noncomputable:
 
-noncomputable instance : DecidablePred p_nat_even := Classical.decPred p_nat_even
-
--- Complains about `Classical.choice` axiom being used
+-- depends on `Classical.choice`.
 -- #eval propFilter p_nat_even [1, 2, 3, 4, 5, 6]
 
 -- Exercise: prove that `propFilter` is sound
@@ -129,11 +115,11 @@ theorem propFilter_sound (p : α → Prop) [DecidablePred p] (xs : List α) :
   intro x hx
   induction xs with
   | nil =>
-     unfold propFilter at hx  -- optional
+     unfold propFilter at hx  -- shown explicitly for pedagogy
      exfalso
      exact (List.mem_nil_iff x).mp hx
   | cons y ys ih => 
-     unfold propFilter at hx -- not optional
+     unfold propFilter at hx
      split at hx
      case isTrue h =>
       cases hx with
@@ -204,7 +190,7 @@ def verifiedFilter (p : α → Prop) [DecidablePred p] (xs : List α) :
 end VerifiedFilter
 
 
--- We can turn the proof of the infinitude of primes from P01S04 into a simple verified algorithm
+-- We can turn the P01S04 infinitude-of-primes proof into a verified algorithm.
 def exists_infinite_primes_algorithm (n : ℕ) :
     { p : ℕ // n ≤ p ∧ Nat.Prime p } :=
   let p := minFac (n ! + 1)
@@ -217,41 +203,27 @@ def exists_infinite_primes_algorithm (n : ℕ) :
       pp.not_dvd_one h₂
   ⟨p, np, pp⟩
 
--- This works ...
-#eval exists_infinite_primes_algorithm 4 
+-- This computes a concrete prime.
+#eval exists_infinite_primes_algorithm 4
 
--- ... even though the theorem used axioms ...
+-- It still depends on classical axioms.
 #print axioms exists_infinite_primes_algorithm
 
--- ... in particular in the definition of  `p` through `minFac` ...
+-- In particular through the `minFac` stack:
 #print axioms minFac        -- [propext, Classical.choice, Quot.sound]
+#print axioms minFacAux     -- [propext, Classical.choice, Quot.sound]
 
 /-
-... but looking at the code we see that minFac only uses the axioms for
-the proof of `decreasing_by` and the actual core algorithm `minFacAux``
-is purely constructive.
+`minFacAux` still reports axioms in this toolchain. This highlights that
+`#print axioms` tracks declaration-level logical dependencies, not only
+runtime behavior after proof erasure.
 
-```
-def minFacAux (n : ℕ) : ℕ → ℕ
-  | k =>
-    if n < k * k then n
-    else
-      if k ∣ n then k
-      else
-        minFacAux n (k + 2)
-termination_by k => sqrt n + 2 - k
-decreasing_by simp_wf; apply minFac_lemma n k; assumption
-
-def minFac (n : ℕ) : ℕ :=
-  if 2 ∣ n then 2 else minFacAux n 3
-```
-
-But note that unlike our subtype example, `minFac` does not bundle
-the (to us) relevant property that the output is prime. Instead 
+Unlike our subtype example, `minFac` does not bundle
+the (to us) relevant property that the output is prime. Instead
 we had to invoke `minFac_prime`.
 -/
 
--- Note that these using axioms is not a problem for us:
+-- Downstream lemmas inherit these dependencies.
 #print axioms minFac_prime  -- [propext, Classical.choice, Quot.sound]
 #print axioms minFac_dvd    -- [propext, Classical.choice, Quot.sound]
 #print axioms minFac_pos    -- [propext, Classical.choice, Quot.sound]
@@ -269,7 +241,7 @@ computable code.
 axiom myChoice (P : Prop) : P ∨ ¬ P
 ```
 
-But we need to  be careful with this, because as soon as we define
+But we need to be careful with this, because as soon as we define
 a contradiction, everything collapses:
 
 ```
@@ -277,10 +249,35 @@ axiom myFallacy : False
 
 theorem weHaveAProblem : 2 = 3 := by
   exfalso
-  exact myFallacy 
+  exact myFallacy
 ```
 -/
 
 #check False
 
+namespace DangerousExample
+axiom myAxiom : ∀ (Q : Prop), Q
+theorem oops : False := myAxiom False
+end DangerousExample
 
+-- `sorry` introduces the axiom `sorryAx`:
+#check @sorryAx
+
+-- Lean's three mathematical axioms:
+#check @propext
+#check @Quot.sound
+#check @Classical.choice
+
+-- Derived principles:
+#check @funext
+#print axioms funext
+#check @Classical.em
+#print axioms Classical.em
+
+-- `False.elim` is constructive (no axioms).
+#print axioms False.elim
+
+-- Compilation trust axioms (for executable code paths):
+#check @Lean.ofReduceBool
+#check @Lean.ofReduceNat
+#check @Lean.trustCompiler

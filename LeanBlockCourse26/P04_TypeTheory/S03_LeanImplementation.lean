@@ -8,12 +8,19 @@ Inductive types, structures, classes, and instances.
 import Mathlib.Tactic.Basic
 import Mathlib.Logic.Basic
 
--- We have a boolean type in lean ...
+namespace P04TypeTheoryS03
+
+-- Kernel term language (`Expr`): everything elaborates to this datatype.
+#check Lean.Expr
+#check Lean.Expr.sort
+#check Lean.Expr.forallE
+
+-- Booleans in Lean.
 #check true   -- `Bool`
 #check false  -- `Bool`
 #check Bool   -- `Type`
 
--- ... which is separate from the proposition type
+-- Propositions are separate from booleans.
 #check True   -- `Prop`
 #check False  -- `Prop`
 #check Prop   -- `Type`
@@ -40,13 +47,19 @@ inductive Weekday where
 #print Weekday.monday
 #check @Weekday.rec
 
--- A class: structure + automatic instance resolution via [...]
+-- `Quot` is the one core primitive that is not user-defined inductive.
+#check Quot
+#check Quot.mk
+#check Quot.lift
+#check @Quot.sound
+
+-- A class: structure + automatic instance resolution via `[...]`.
 class Greet (α : Type*) where
   greet : α → String
 
 def actual_greeting {α : Type*} [Greet α] (x : α) := Greet.greet x
 
-instance : Greet Weekday where greet 
+instance : Greet Weekday where greet
   | .monday => "ugh"
   | .friday => "finally"
   | _ => "meh"
@@ -58,3 +71,5 @@ def monday : Weekday := Weekday.monday
 -- Decidable: bridges Prop and Bool
 #print Decidable
 #eval if (3 : Nat) < 5 then "yes" else "no"
+
+end P04TypeTheoryS03

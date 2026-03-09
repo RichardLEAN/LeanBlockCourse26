@@ -10,4 +10,8 @@ import LeanBlockCourse26.P02_Logic.S05_Quantifiers
 
 import LeanBlockCourse26.P03_SetTheory.S01_SubsetsComplements
 import LeanBlockCourse26.P03_SetTheory.S02_IntersectionsUnions
--- import LeanBlockCourse26.P03_SetTheory.S03_SetFamilies
+import LeanBlockCourse26.P03_SetTheory.S03_SetFamilies
+
+import LeanBlockCourse26.P04_TypeTheory.S02_DependentTypeTheory
+import LeanBlockCourse26.P04_TypeTheory.S03_LeanImplementation
+import LeanBlockCourse26.P04_TypeTheory.S04_VerifiedComputation
