@@ -237,8 +237,9 @@ example {m n : MyNat} (h : MyNat.succ n = MyNat.succ m) : n = m := MyNat.noConfu
 ## Exercise Block B02
 -/
 
--- Exercise 2.1
--- **Eigth peano axiom**
+-- Exercise 2.1 – **Eigth peano axiom**
+-- `MyNat.noConfusion` gives us not only the seventh but also the eigth peano axiom.
+
 theorem eight_peano_axiom_contradiction (n : MyNat) : 0 ≠ succ n := by
   intro s
   contradiction
@@ -262,8 +263,8 @@ theorem zero_ne_one : (0 : MyNat) ≠ 1 := eight_peano_axiom 0
 
 theorem one_ne_zero : (1 : MyNat) ≠ 0 := zero_ne_one.symm
 
--- Exercise 2.3
--- **Eigth peano axiom**
+-- Exercise 2.3 – **Eigth peano axiom**
+-- `MyNat.rec` unlocks induction for us, which is the eight and final peano axiom
 
 theorem ninth_peano_axiom (P : MyNat → Prop) (h₁ : P 0) (h₂ : ∀ n, (P n → P n.succ)) :
     ∀ n, P n := by
@@ -275,3 +276,34 @@ theorem ninth_peano_axiom_set' (K : Set MyNat) (h₁ : 0 ∈ K) (h₂ : ∀ n, n
 
 end MyNat
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+theorem ninth_peano_axiom (P : MyNat → Prop) (h₁ : P 0) (h₂ : ∀ n, (P n → P n.succ)) :
+    ∀ n, P n := by
+  intro n
+  induction n with
+  | zero => exact h₁
+  | succ n uh => sorry
+
+theorem ninth_peano_axiom_set' (K : Set MyNat) (h₁ : 0 ∈ K) (h₂ : ∀ n, n ∈ K → n.succ ∈ K) :
+    K = Set.univ := by
+  ext x
+  constructor
+  · intro xk
+    exact Set.mem_univ x
+  · intro xs
+    exact ninth_peano_axiom (fun n => n ∈ K) h₁ h₂ x
