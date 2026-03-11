@@ -18,9 +18,8 @@ import LeanBlockCourse26.P04_TypeTheory.S04_VerifiedComputation
 
 import LeanBlockCourse26.P05_NaturalNumbers.S01_Definition
 import LeanBlockCourse26.P05_NaturalNumbers.S02_Addition
--- import LeanBlockCourse26.P05_NaturalNumbers.S03_Multiplication
--- import LeanBlockCourse26.P05_NaturalNumbers.S04_Power
--- import LeanBlockCourse26.P05_NaturalNumbers.S05_AdvancedAddition
--- import LeanBlockCourse26.P05_NaturalNumbers.S06_Inequalities
--- import LeanBlockCourse26.P05_NaturalNumbers.S07_AdvancedMultiplication
--- import LeanBlockCourse26.P05_NaturalNumbers.S08_MoreTactics
+import LeanBlockCourse26.P05_NaturalNumbers.S03_Multiplication
+import LeanBlockCourse26.P05_NaturalNumbers.S04_Power
+import LeanBlockCourse26.P05_NaturalNumbers.S05_AdvancedAddition
+import LeanBlockCourse26.P05_NaturalNumbers.S06_Inequalities
+import LeanBlockCourse26.P05_NaturalNumbers.S07_AdvancedMultiplication

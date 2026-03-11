@@ -3,7 +3,7 @@ This part is mostly inspired by the `Natural Number Game`:
 https://adam.math.hhu.de/#/g/leanprover-community/nng4
 -/
 
-import BlockCourse.P05_NaturalNumbers.S04_Power
+import LeanBlockCourse26.P05_NaturalNumbers.S04_Power
 
 /-
 # Advanced Addition
