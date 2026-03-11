@@ -34,15 +34,15 @@ theorem mul_left_ne_zero {n m : MyNat} (h : n * m ≠ 0) : m ≠ 0 := by
 theorem le_mul_right {n m : MyNat} (h : n * m ≠ 0) : n ≤ n * m := by
   sorry
 
--- Exercise 1.5
+-- Exercise 1.5 (Master)
 theorem mul_right_eq_one {n m : MyNat} (h : n * m = 1) : n = 1 := by
   sorry
 
--- Exercise 1.6
+-- Exercise 1.6 (Master)
 theorem mul_ne_zero {n m : MyNat} (hn : n ≠ 0) (hm : m ≠ 0) : n * m ≠ 0 := by
   sorry
 
--- Exercise 1.7
+-- Exercise 1.7 (Master)
 theorem mul_eq_zero {n m : MyNat} (h : n * m = 0) : n = 0 ∨ m = 0 := by
   sorry
 
