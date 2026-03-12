@@ -1,5 +1,5 @@
 /-
-## Handshaking lemma: the sum of the degrees in a graph is twice the number if its vertices
+## Handshaking lemma: the sum of the degrees in a graph is twice the number of its edges
 
 A *simple graph* `G = (V, E)` is defined by its set of *vertices (nodes)* `V` and
 a set of *edges* `∅ ⊆ E ⊆ { e = {u, v} ∣ u ≠ v ∈ V }`. It is *finite* if `V` is
@@ -11,11 +11,11 @@ where `u ~ v` if and only if `{u, v} ∈ E` (which in particular implies that
 and any of its two vertices are said to be *incident*.
 
 The *neighborhood* of a vertex `v` is defined as `N(v) = {u | u ~ v}`. Its
-*degree* `d(v) = #N(v)` is simply the cardinality of its neighbordhood.
-The *incidence set* of a vertex `v` is defined as `I(V) = {e ∈ E | v ∈ e}`.
+*degree* `d(v) = #N(v)` is simply the cardinality of its neighborhood.
+The *incidence set* of a vertex `v` is defined as `I(v) = {e ∈ E | v ∈ e}`.
 
 **Handshake Lemma.** Given any finite simple graph `G = (V, E)`, the sum of the
-degrees of all its vertices equals twice its size, that is `Σ_v d(v) = 2 * #E`. 
+degrees of all its vertices equals twice its size, that is `Σ_v d(v) = 2 * #E`.
 -/
 
 /-
