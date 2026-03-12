@@ -127,8 +127,8 @@ theorem infinitude_of_primes_tfae : [
    obtain (_ : ¬(∃ p ∉ P_finite.toFinset, Nat.Prime p)) := by
       push_neg
       intro p p_not_in_P_finset
-      have p_not_in_S := (@Set.Finite.mem_toFinset ℕ P p P_finite).mpr.mt p_not_in_P_finset
-      exact Set.notMem_setOf_iff.mp p_not_in_S
+      have p_not_in_P := (@Set.Finite.mem_toFinset ℕ P p P_finite).mpr.mt p_not_in_P_finset
+      exact Set.notMem_setOf_iff.mp p_not_in_P
    contradiction
 
   tfae_have 1 → 5 := by sorry -- Tonio
