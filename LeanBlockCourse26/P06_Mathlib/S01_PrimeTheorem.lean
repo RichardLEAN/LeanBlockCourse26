@@ -214,7 +214,10 @@ theorem infinitude_of_primes_tfae : [
 
   tfae_have 4 → 1 := by sorry -- Cara
 
-  tfae_have 1 → 5 := by sorry -- Tonio
+  tfae_have 1 → 5 := by -- Tonio
+   intro h n
+   have ⟨x, y, z⟩ := h.exists_gt n
+   exact ⟨x, z, y⟩
 
   tfae_have 1 → 3 := by sorry -- Nina
 
